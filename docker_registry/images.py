@@ -120,7 +120,7 @@ def _get_image_json(image_id, headers=None):
     checksum_path = store.image_checksum_path(image_id)
     if store.exists(checksum_path):
         headers['X-Docker-Checksum'] = store.get_content(checksum_path)
-    return toolkit.response(data, headers=headers, raw=True)
+    return toolkit.response(data.encode('utf-8'), headers=headers, raw=True)
 
 
 def _parse_bytes_range():
@@ -410,7 +410,8 @@ def put_image_json(image_id):
     # If we reach that point, it means that this is a new image or a retry
     # on a failed push
     store.put_content(mark_path, 'true')
-    store.put_content(json_path, flask.request.data)
+    json_data = flask.request.data.decode('utf-8')
+    store.put_content(json_path, json_data)
     layers.generate_ancestry(image_id, parent_id)
     return toolkit.response()
 
