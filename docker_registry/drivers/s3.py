@@ -8,6 +8,7 @@ This is a s3 based driver.
 """
 
 import gevent.monkey
+
 gevent.monkey.patch_all()
 
 import docker_registry.core.boto as coreboto
@@ -60,7 +61,6 @@ class Cloudfront():
 
 
 class Storage(coreboto.Base):
-
     def __init__(self, path, config):
         super(Storage, self).__init__(path, config)
 
@@ -73,8 +73,8 @@ class Storage(coreboto.Base):
     def makeConnection(self):
         kwargs = self._build_connection_params()
         if self._config.s3_region is not None:
-            return boto.s3.connect_to_region(
-                region_name=self._config.s3_region,
+            return boto.s3.connection.S3Connection(
+                host=self._config.s3_region,
                 aws_access_key_id=self._config.s3_access_key,
                 aws_secret_access_key=self._config.s3_secret_key,
                 **kwargs)
