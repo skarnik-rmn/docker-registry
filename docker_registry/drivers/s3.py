@@ -30,6 +30,7 @@ logger = logging.getLogger(__name__)
 
 
 class Cloudfront():
+
     def __init__(self, awsaccess, awssecret, base, keyid, privatekey):
         boto.connect_cloudfront(
             awsaccess,
@@ -61,6 +62,7 @@ class Cloudfront():
 
 
 class Storage(coreboto.Base):
+
     def __init__(self, path, config):
         super(Storage, self).__init__(path, config)
 
